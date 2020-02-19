@@ -42,13 +42,13 @@ def callback():
 def handle_message(event):
     msg = event.message.text
     r = '請換句話說。'
-        if msg in ['Hi', 'hi']:
-            r = 'Hello~'
-        elif msg == '再見' or msg == '掰掰':
-            r = 'See Ya~'
-        elif msg == '現在時間' or msg == '現在幾點':
-            now = datetime.now()
-            r = str(now.hour) + ':' + str(now.minute) + ':' + str(now.second)
+    if msg in ['Hi', 'hi']:
+        r = 'Hello~'
+    elif msg == '再見' or msg == '掰掰':
+        r = 'See Ya~'
+    elif msg == '現在時間' or msg == '現在幾點':
+        now = datetime.now()
+        r = str(now.hour) + ':' + str(now.minute) + ':' + str(now.second)
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=r))
