@@ -1,5 +1,3 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 from flask import Flask, request, abort
 from datetime import datetime
 
@@ -40,7 +38,7 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    msg = event.message.text.decode("utf-8")
+    msg = event.message.text
     r = '請換句話說。'
     if msg in ['Hi', 'hi']:
         r = 'Hello~'
