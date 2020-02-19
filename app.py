@@ -1,5 +1,5 @@
 from flask import Flask, request, abort
-#from datetime import datetime
+from datetime import datetime
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -39,17 +39,17 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     msg = event.message.text
-    r = "請換句話說。"
-    # if msg in ["Hi", "hi"]:
-    #     r = "Hello~"
-    # elif msg == "再見" or msg == "掰掰":
-    #     r = "See Ya~"
-    # elif msg == "現在時間" or msg == "現在幾點":
-    #     now = datetime.now()
-    #     r = str(now.hour) + ":" + str(now.minute) + ":" + str(now.second)
+    r = '請換句話說。'
+      if msg in ['Hi', 'hi']:
+        r = 'Hello~'
+      elif msg == '再見' or msg == '掰掰':
+        r = 'See Ya~'
+      elif msg == '現在時間' or msg == '現在幾點':
+        now = datetime.now()
+        r = str(now.hour) + ':' + str(now.minute) + ':' + str(now.second)
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=event.message.text))
+        TextSendMessage(text=r))
 
 
 if __name__ == "__main__":
