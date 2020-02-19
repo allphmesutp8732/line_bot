@@ -1,4 +1,5 @@
-coding=utf-8
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from flask import Flask, request, abort
 from datetime import datetime
 
