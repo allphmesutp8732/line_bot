@@ -49,7 +49,7 @@ def handle_message(event):
     #     r = str(now.hour) + ":" + str(now.minute) + ":" + str(now.second)
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=r))
+        TextSendMessage(text=event.message.text))
 
 
 if __name__ == "__main__":
