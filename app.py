@@ -40,9 +40,9 @@ def callback():
 def handle_message(event):
     msg = event.message.text
     r = "請換句話說。"
-    if msg == "Hi" or "你好" in msg:
+    if msg in ["Hi", "hi"]:
         r = "Hello~"
-    elif msg == "再見" or msg == "掰掰" or "bye" in msg:
+    elif msg == "再見" or msg == "掰掰":
         r = "See Ya~"
     elif msg == "現在時間" or msg == "現在幾點":
         now = datetime.now()
