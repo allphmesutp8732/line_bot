@@ -40,7 +40,7 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    msg = event.message.text
+    msg = event.message.text.decode("utf-8")
     r = '請換句話說。'
     if msg in ['Hi', 'hi']:
         r = 'Hello~'
