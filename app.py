@@ -63,7 +63,8 @@ def MakeWeather(station):
         return False
 
     WeatherData = WeatherData["weatherElement"]
-    City = WeatherData["parameter"][0]["parameterValue"]
+    City = WeatherData["parameter"]
+    City = City[0]["parameterValue"]
     City_cast = ""
     msg = "花花天氣報告 - " + station + "測站"
     msg += "\n\n氣溫 = " + WeatherData[3]["elementValue"] + "℃\n"
@@ -77,13 +78,16 @@ def MakeWeather(station):
         if item["locationName"] == City:
             City_cast = item["weatherElement"]
     msg += "\n天氣預報：\n"
-
-    msg += City_cast[0]["time"][0]["startTime"] + " ~ " + City_cast[0]["time"][0]["endTime"] + " : "
-    msg += City_cast[0]["time"][0]["parameter"]["parameterName"] + " 降雨機率： " + City_cast[1]["time"][0]["parameter"]["parameterName"] + " % "
-    msg += "\n 最高溫 " + City_cast[4]["time"][0]["parameter"]["parameterName"] + "最低溫 " + City_cast[2]["time"][0]["parameter"]["parameterName"]+ " \n"
-    msg += City_cast[0]["time"][1]["startTime"] + " ~ " + City_cast[0]["time"][1]["endTime"] + " : "
-    msg += City_cast[0]["time"][1]["parameter"]["parameterName"] + " 降雨機率： " + City_cast[1]["time"][1]["parameter"]["parameterName"] + " % "
-    msg += "\n 最高溫 " + City_cast[4]["time"][1]["parameter"]["parameterName"] + "最低溫 " + City_cast[2]["time"][1]["parameter"]["parameterName"]+ " \n"
+    f_time = City_cast[0]["time"]
+    f_PoP = City_cast[1]["time"]
+    f_maxT = City_cast[4]["time"]
+    f_minT = City_cast[2]["time"]
+    msg += f_time[0]["startTime"] + " ~ " + f_time[0]["endTime"] + " : "
+    msg += f_time[0]["parameter"]["parameterName"] + " 降雨機率： " + f_PoP[0]["parameter"]["parameterName"] + " % "
+    msg += "\n 最高溫 " + f_maxT[0]["parameter"]["parameterName"] + "最低溫 " + f_minT[0]["parameter"]["parameterName"]+ " \n"
+    msg += f_time[1]["startTime"] + " ~ " + f_time[1]["endTime"] + " : "
+    msg += f_time[1]["parameter"]["parameterName"] + " 降雨機率： " + f_PoP[1]["parameter"]["parameterName"] + " % "
+    msg += "\n 最高溫 " + f_maxT[1]["parameter"]["parameterName"] + "最低溫 " + f_minT[1]["parameter"]["parameterName"]+ " \n"
     return msg
 
 @handler.add(MessageEvent, message=TextMessage)
