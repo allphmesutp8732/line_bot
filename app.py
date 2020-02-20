@@ -47,7 +47,7 @@ def callback():
     return 'OK'
 
 def GetWeather(station):
-    end_point = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-071?Authorization=CWB-C6C22A6C-B350-4583-A765-D34DC7A98E1D"
+    end_point = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=CWB-C6C22A6C-B350-4583-A765-D34DC7A98E1D"
     data = requests.get(end_point).json()
     data = data["records"]["location"]
 
@@ -86,7 +86,7 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text=WeatherMsg))
         return
-        
+
     r = '看不懂，請換句話說。'
     if '貼圖' in msg:
         sticker_message = StickerSendMessage(
