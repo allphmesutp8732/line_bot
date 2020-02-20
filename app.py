@@ -47,7 +47,7 @@ def callback():
     return 'OK'
 
 def GetWeather(station):
-    end_point = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=CWB-C6C22A6C-B350-4583-A765-D34DC7A98E1D"
+    end_point = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=CWB-C6C22A6C-B350-4583-A765-D34DC7A98E1D"
     data = requests.get(end_point).json()
     data = data["records"]["location"]
 
@@ -55,13 +55,13 @@ def GetWeather(station):
     for item in data:
         if item["locationName"] == str(station):
             target_station = item
-        else:
-            end_point = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=CWB-C6C22A6C-B350-4583-A765-D34DC7A98E1D"
-            data = requests.get(end_point).json()
-            data = data["records"]["location"]
-            for i in data:
-                if i["locationName"] == str(station):
-                    target_station = item
+        # else:
+        #     end_point = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=CWB-C6C22A6C-B350-4583-A765-D34DC7A98E1D"
+        #     data = requests.get(end_point).json()
+        #     data = data["records"]["location"]
+        #     for i in data:
+        #         if i["locationName"] == str(station):
+        #             target_station = item
     return target_station
 
 def MakeWeather(station):
