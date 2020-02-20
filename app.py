@@ -63,10 +63,27 @@ def MakeWeather(station):
         return False
 
     WeatherData = WeatherData["weatherElement"]
-    msg = "花花天氣報告 - " + station
+    City = WeatherData["parameter"][0]["parameterValue"]
+    City_cast = ""
+    msg = "花花天氣報告 - " + station + "測站"
     msg += "\n\n氣溫 = " + WeatherData[3]["elementValue"] + "℃\n"
     msg += "濕度 = " + \
         str(float(WeatherData[4]["elementValue"]) * 100) + "% RH\n"
+    msg += "累積雨量 = " + WeatherData[6]["elementValue"] + "mm\n"
+    end_point2 = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWB-C6C22A6C-B350-4583-A765-D34DC7A98E1D"
+    forecast_data = requests.get(end_point2).json()
+    forecast_data = forecast_data["records"]["location"]
+    for item in forecast_data:
+        if item["locationName"] == City:
+            City_cast = item["weatherElement"]
+    msg += "\n天氣預報：\n"
+
+    msg += City_cast[0]["time"][0]["startTime"] + " ~ " + City_cast[0]["time"][0]["endTime"] + " : "
+    msg += City_cast[0]["time"][0]["parameter"]["parameterName"] + " 降雨機率： " + City_cast[1]["time"][0]["parameter"]["parameterName"] + " % "
+    msg += "\n 最高溫 " + City_cast[4]["time"][0]["parameter"]["parameterName"] + "最低溫 " + City_cast[2]["time"][0]["parameter"]["parameterName"]+ " \n"
+    msg += City_cast[0]["time"][1]["startTime"] + " ~ " + City_cast[0]["time"][1]["endTime"] + " : "
+    msg += City_cast[0]["time"][1]["parameter"]["parameterName"] + " 降雨機率： " + City_cast[1]["time"][1]["parameter"]["parameterName"] + " % "
+    msg += "\n 最高溫 " + City_cast[4]["time"][1]["parameter"]["parameterName"] + "最低溫 " + City_cast[2]["time"][1]["parameter"]["parameterName"]+ " \n"
     return msg
 
 @handler.add(MessageEvent, message=TextMessage)
