@@ -1,4 +1,5 @@
-from flask import Flask, request, abort
+from __future__ import unicode_literals
+from flask import Flask, request, abort, render_template
 from datetime import datetime
 
 from linebot import (
@@ -8,9 +9,14 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage, StickerSendMessage
+    MessageEvent, TextMessage, TextSendMessage, StickerSendMessage, ImageMessage, ImageSendMessage
 )
 import configparser
+import urllib
+import re
+import random
+import json
+import requests
 
 app = Flask(__name__)
 
@@ -40,10 +46,47 @@ def callback():
 
     return 'OK'
 
+def GetWeather(station):
+    end_point = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-071?Authorization=CWB-C6C22A6C-B350-4583-A765-D34DC7A98E1D"
+    data = requests.get(end_point).json()
+    data = data["records"]["location"]
+
+    target_station = "not found"
+    for item in data:
+        if item["locationName"] == str(station):
+            target_station = item
+    return target_station
+
+def MakeWeather(station):
+    WeatherData = GetWeather(station)
+    if WeatherData == "not found":
+        return False
+
+    WeatherData = WeatherData["weatherElement"]
+    msg = "花花天氣報告 - " + station
+    msg += "\n\n氣溫 = " + WeatherData[3]["elementValue"] + "℃\n"
+    msg += "濕度 = " + \
+        str(float(WeatherData[4]["elementValue"]) * 100) + "% RH\n"
+    return msg
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    print('Handle: reply_token: ' + event.reply_token + ', message: ' + event.message.text)
     msg = event.message.text
+    msg_weather = event.message.text.split(' ')
+
+    if msg_weather[0] == '天氣':
+        station = cmd[1]
+        WeatherMsg = MakeWeather(station)
+
+        if not WeatherMsg:
+            WeatherMsg = "找不到這個氣象站"
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=WeatherMsg))
+        return
+        
     r = '看不懂，請換句話說。'
     if '貼圖' in msg:
         sticker_message = StickerSendMessage(
@@ -61,7 +104,7 @@ def handle_message(event):
     elif '再見' in msg or '掰掰' in msg or 'bye' in msg or 'Bye' in msg:
         r = 'See Ya~'
     elif '現在時間' in msg or '現在幾點' in msg:
-        now = datetime.now()
+        now = datetime.now().ctime()
         r = str((now.hour+8)%24) + ':' + str(now.minute) + ':' + str(now.second)
     line_bot_api.reply_message(
         event.reply_token,
