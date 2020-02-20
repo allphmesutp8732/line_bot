@@ -151,7 +151,7 @@ def handle_message(event):
     elif '再見' in msg or '掰掰' in msg or 'bye' in msg or 'Bye' in msg:
         r = 'See Ya~'
     elif '現在時間' in msg or '現在幾點' in msg:
-        now = datetime.now()
+        now = datetime.datetime.today()
         r = now.strftime('%H:%M:%S')
     line_bot_api.reply_message(
         event.reply_token,
