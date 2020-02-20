@@ -56,13 +56,18 @@ def GetWeather(station):
     for item in data:
         if item["locationName"] == str(station):
             target_station = item
+            return target_station
+            continue
+
     #人工測站        
     end_point = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=CWB-C6C22A6C-B350-4583-A765-D34DC7A98E1D"
     data = requests.get(end_point).json()
     data = data["records"]["location"]
-    for i in data:
-        if i["locationName"] == str(station):
+    for item in data:
+        if item["locationName"] == str(station):
             target_station = item
+            return target_station
+            continue
     return target_station
 
 def MakeWeather(station):
@@ -72,7 +77,7 @@ def MakeWeather(station):
 
     
     msg = "花花天氣報告 - " + station + "測站"
-    msg += "最後觀測時間：" + WeatherData["time"]["obsTime"]
+    msg += "\n最後觀測時間：" + WeatherData["time"]["obsTime"]
     City = WeatherData["parameter"]
     WeatherData = WeatherData["weatherElement"]
     City = City[0]["parameterValue"]
@@ -87,17 +92,17 @@ def MakeWeather(station):
     for item in forecast_data:
         if item["locationName"] == City:
             City_cast = item["weatherElement"]
-    msg += "\n天氣預報：\n"
+    msg += "\n縣市天氣預報：\n"
     f_time = City_cast[0]["time"]
     f_PoP = City_cast[1]["time"]
     f_maxT = City_cast[4]["time"]
     f_minT = City_cast[2]["time"]
-    msg += f_time[0]["startTime"] + " ~ " + f_time[0]["endTime"] + " : "
-    msg += f_time[0]["parameter"]["parameterName"] + " 降雨機率： " + f_PoP[0]["parameter"]["parameterName"] + " % "
-    msg += "\n 最高溫 " + f_maxT[0]["parameter"]["parameterName"] + "最低溫 " + f_minT[0]["parameter"]["parameterName"]+ " \n"
-    msg += f_time[1]["startTime"] + " ~ " + f_time[1]["endTime"] + " : "
-    msg += f_time[1]["parameter"]["parameterName"] + " 降雨機率： " + f_PoP[1]["parameter"]["parameterName"] + " % "
-    msg += "\n 最高溫 " + f_maxT[1]["parameter"]["parameterName"] + "最低溫 " + f_minT[1]["parameter"]["parameterName"]+ " \n"
+    msg += f_time[0]["startTime"] + " ~ " + f_time[0]["endTime"] + " : \n"
+    msg += f_time[0]["parameter"]["parameterName"] + " 降雨機率：" + f_PoP[0]["parameter"]["parameterName"] + " % "
+    msg += "最高溫 " + f_maxT[0]["parameter"]["parameterName"] + " 最低溫 " + f_minT[0]["parameter"]["parameterName"]+ " \n"
+    msg += f_time[1]["startTime"] + " ~ " + f_time[1]["endTime"] + " : \n"
+    msg += f_time[1]["parameter"]["parameterName"] + " 降雨機率：" + f_PoP[1]["parameter"]["parameterName"] + " % "
+    msg += "最高溫 " + f_maxT[1]["parameter"]["parameterName"] + " 最低溫 " + f_minT[1]["parameter"]["parameterName"]+ " \n"
     return msg
 
 @handler.add(MessageEvent, message=TextMessage)
