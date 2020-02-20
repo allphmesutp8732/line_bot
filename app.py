@@ -76,7 +76,7 @@ def handle_message(event):
     msg_weather = event.message.text.split(' ')
 
     if msg_weather[0] == '天氣':
-        station = cmd[1]
+        station = msg_weather[1]
         WeatherMsg = MakeWeather(station)
 
         if not WeatherMsg:
