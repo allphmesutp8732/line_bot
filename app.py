@@ -10,13 +10,18 @@ from linebot.exceptions import (
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage, StickerSendMessage
 )
+import configparser
 
 app = Flask(__name__)
 
-line_bot_api = LineBotApi('qpWMu2KuLbVUwhLGyqiZKc0AVqoZwPKGJNw0aMjxAsmR9E1ZQ6h/7lhsQAlSN24Yf5tDBZ7xy6Bb7pryoXmD+6R7L4tor3O8csgz+jXW+4p2z68SvYq3sz3NY2J7gkVnLE1XiPclzMUmjAj3moFfmAdB04t89/1O/w1cDnyilFU=')
-handler = WebhookHandler('e262791ee0d485493cddece097761a9d')
 
+# Line 聊天機器人基本資料
+config = configparser.ConfigParser()
+config.read('config.ini')
+line_bot_api = LineBotApi(config.get('line-bot', 'access_token'))
+handler = WebhookHandler(config.get('line-bot', 'WebHook_handler'))
 
+# 接收 Line 的資訊
 @app.route("/callback", methods=['POST'])
 def callback():
     # get X-Line-Signature header value
@@ -53,9 +58,9 @@ def handle_message(event):
 
     if 'Hi' in msg or 'hi' in msg:
         r = 'Hello~'
-    elif msg == '再見' or msg == '掰掰' or 'bye' in msg or 'Bye' in msg:
+    elif '再見' in msg or '掰掰' in msg or 'bye' in msg or 'Bye' in msg:
         r = 'See Ya~'
-    elif msg == '現在時間' or msg == '現在幾點':
+    elif '現在時間' in msg or '現在幾點' in msg:
         now = datetime.now()
         r = str((now.hour+8)%24) + ':' + str(now.minute) + ':' + str(now.second)
     line_bot_api.reply_message(
