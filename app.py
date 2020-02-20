@@ -112,6 +112,12 @@ def handle_message(event):
     msg_weather = event.message.text.split(' ')
 
     if msg_weather[0] == '天氣':
+        if len(msg_weather) == 1:
+            line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="你沒輸入測站啊！！！"))
+        return
+        
         station = msg_weather[1]
         WeatherMsg = MakeWeather(station)
 
