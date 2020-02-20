@@ -62,8 +62,8 @@ def MakeWeather(station):
     if WeatherData == "not found":
         return False
 
-    WeatherData = WeatherData["weatherElement"]
     City = WeatherData["parameter"]
+    WeatherData = WeatherData["weatherElement"]
     City = City[0]["parameterValue"]
     City_cast = ""
     msg = "花花天氣報告 - " + station + "測站"
