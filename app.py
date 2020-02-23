@@ -125,7 +125,7 @@ def handle_message(event):
         
         station = msg_weather[1]
         if station[0] == "台":
-            station[0] = "臺"
+            station = "臺" + station[1:]
         WeatherMsg = MakeWeather(station)
 
         if not WeatherMsg:
