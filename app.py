@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 from flask import Flask, request, abort, render_template
-from datetime import datetime
+from datetime import datetime,timezone,timedelta
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -124,6 +124,8 @@ def handle_message(event):
             return
         
         station = msg_weather[1]
+        if station[0] == "台":
+            station[0] = "臺"
         WeatherMsg = MakeWeather(station)
 
         if not WeatherMsg:
@@ -148,10 +150,14 @@ def handle_message(event):
 
     if 'Hi' in msg or 'hi' in msg:
         r = 'Hello~'
-    elif '再見' in msg or '掰掰' in msg or 'bye' in msg or 'Bye' in msg:
-        r = 'See Ya~'
-    elif '現在時間' in msg or '現在幾點' in msg:
-        now = datetime.datetime.today()
+    elif "嗨" in msg or '哈囉' in msg or '安安' in msg:
+        r = "嗨嗨～"
+    elif '再見' in msg or '掰掰' in msg:
+        r = '掰哺～'
+    elif 'bye' in msg or 'Bye' in msg:
+        r = "See Ya~"
+    elif '現在時間' in msg or '現在幾點' in msg or '現在時刻' in msg:
+        now = datetime.utconw().replace(tzinfo = timezone.utc).astimezone(timezone(timedelta(hours = 8)))
         r = now.strftime('%H:%M:%S')
     line_bot_api.reply_message(
         event.reply_token,
