@@ -17,9 +17,9 @@ import re
 import random
 import json
 import requests
+from stickers import sticker_ids
 
 app = Flask(__name__)
-
 
 # Line 聊天機器人基本資料
 config = configparser.ConfigParser()
@@ -138,14 +138,7 @@ def handle_message(event):
 
     r = '看不懂，請換句話說。'
     if '貼圖' in msg:
-        sticker_message = StickerSendMessage(
-            package_id = '1',
-            sticker_id = '1'
-        )
-
-        line_bot_api.reply_message(
-        event.reply_token,
-        sticker_message)
+        handle_sticker_message()
         return
 
     if 'Hi' in msg or 'hi' in msg:
@@ -162,6 +155,27 @@ def handle_message(event):
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=r))
+
+@handler.add(MessageEvent, message=StickerMessage)
+def handle_sticker_message(event):
+    index_id = random.randint(0, len(sticker_ids) - 1)
+    sticker_id = str(sticker_ids[index_id])
+    print("index_id = ",index_id)
+    if index_id < 34:
+        sticker_message = StickerSendMessage(
+            package_id='1',
+            sticker_id=sticker_id
+            )
+    else:
+        sticker_message = StickerSendMessage(
+            package_id='2',
+            sticker_id=sticker_id
+            )
+    line_bot_api.reply_message(
+        event.reply_token,
+        sticker_message)
+
+
 
 
 if __name__ == "__main__":
