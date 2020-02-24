@@ -163,8 +163,8 @@ def handle_message(event):
         event.reply_token,
         TextSendMessage(text=r))
 
-@handler.add(MessageEvent, message=StickerMessage)
-def handle_sticker_message(event):
+@handler.add(MessageEvent)
+def handle_sticker_message(event, destination):
     index_id = random.randint(0, len(sticker_ids) - 1)
     sticker_id = str(sticker_ids[index_id])
     print("index_id = ",index_id)
