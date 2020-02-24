@@ -138,14 +138,22 @@ def handle_message(event):
 
     r = '看不懂，請換句話說。'
     if '貼圖' in msg:
-        sticker_message = StickerSendMessage(
-            package_id = '1',
-            sticker_id = '1'
-        )
-
+        index_id = random.randint(0, len(sticker_ids) - 1)
+        sticker_id = str(sticker_ids[index_id])
+        print("index_id = ",index_id)
+        if index_id < 34:
+            sticker_message = StickerSendMessage(
+                package_id='1',
+                sticker_id=sticker_id
+                )
+        else:
+            sticker_message = StickerSendMessage(
+                package_id='2',
+                sticker_id=sticker_id
+                )
         line_bot_api.reply_message(
-        event.reply_token,
-        sticker_message)
+            event.reply_token,
+            sticker_message)
         return
 
     if 'Hi' in msg or 'hi' in msg:
@@ -181,9 +189,6 @@ def handle_sticker_message(event, destination):
     line_bot_api.reply_message(
         event.reply_token,
         sticker_message)
-
-
-
 
 if __name__ == "__main__":
     app.run()
