@@ -169,9 +169,7 @@ def handle_message(event):
 
     if "匯率" in msg or "currency" in msg or "Currency" in msg:
         print ("Currency selection.")
-        buttons_template = TemplateSendMessage(
-        alt_text='請選擇要查詢的匯率',
-        template=ButtonsTemplate(
+        buttons_template = ButtonsTemplate(
             title='請選擇要查詢的匯率',
             text='系統將回傳最新匯率資料，此為平均數值，詳細匯率請洽各大銀行官方告示。',
             thumbnail_image_url='https://www.advisor.ca/wp-content/uploads/sites/5/2018/07/different-world-currencies.jpg',
@@ -208,7 +206,6 @@ def handle_message(event):
                 )
                 ]
             )
-        )
     #    CurrencyExchange(buttons_template)
         line_bot_api.reply_message(
             event.reply_token,
