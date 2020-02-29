@@ -209,6 +209,12 @@ def handle_message(event):
             )
         )
     #    CurrencyExchange(buttons_template)
+        line_bot_api.reply_message(
+            event.reply_token,
+            TemplateSendMessage(
+                alt_text="Template Example",
+                template=button_template_message
+                ))
         return
 
     if 'Hi' in msg or 'hi' in msg or 'hello' in msg or 'Hello' in msg:
