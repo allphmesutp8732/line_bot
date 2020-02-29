@@ -208,7 +208,7 @@ def handle_message(event):
                 ]
             )
         )
-        CurrencyExchange(buttons_template)
+    #    CurrencyExchange(buttons_template)
         return
 
     if 'Hi' in msg or 'hi' in msg or 'hello' in msg or 'Hello' in msg:
