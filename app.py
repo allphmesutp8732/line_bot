@@ -175,23 +175,23 @@ def handle_message(event):
             thumbnail_image_url='https://www.advisor.ca/wp-content/uploads/sites/5/2018/07/different-world-currencies.jpg',
             actions=[
                 PostbackTemplateAction(
-                    label='USD',
-                    text='美金',
+                    label='美金',
+                    text='匯率 美金',
                     data='USD'
                 ),
                 PostbackTemplateAction(
-                    label='JPY',
-                    text='日幣',
+                    label='日幣',
+                    text='匯率 日幣',
                     data='JPY'
                 ),
                 PostbackTemplateAction(
-                    label='RMB',
-                    text='人民幣',
+                    label='人民幣',
+                    text='匯率 人民幣',
                     data='RMB'
                 ),
                 PostbackTemplateAction(
-                    label='other',
-                    text='其他',
+                    label='其他',
+                    text='匯率 其他',
                     data='other'
                 )
                 ]
