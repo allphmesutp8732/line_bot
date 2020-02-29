@@ -8,9 +8,7 @@ from linebot import (
 from linebot.exceptions import (
     InvalidSignatureError
 )
-from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage, StickerSendMessage, ImageMessage, ImageSendMessage
-)
+from linebot.models import *
 import configparser
 import urllib
 import re
@@ -105,11 +103,22 @@ def MakeWeather(station):
     msg += "最高溫 " + f_maxT[1]["parameter"]["parameterName"] + " 最低溫 " + f_minT[1]["parameter"]["parameterName"]+ " \n"
     return msg
 
+def CurrencyExchange(currency):
+    data = requests.get('https://tw.rter.info/capi.php').json()
+    currency = "USD" + currency
+    Exd = data[currency]
+    exrate = Exd["Exrate"]
+    time = Exd["UTC"]
+    msg = "最後更新時間：UTC" + time + '\n'
+    msg += "目前匯率：" + exrate
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text = msg))
+    return
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     print('Handle: reply_token: ' + event.reply_token + ', message: ' + event.message.text)
     msg = event.message.text
-    msg_weather = event.message.text.split(' ')
+    msg_weather = msg.split(' ')
 
     if msg_weather[0] == '天氣':
         if len(msg_weather) == 1:
@@ -154,6 +163,51 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             sticker_message)
+        return
+
+    if "匯率" in msg or "currency" in msg or "Currency" in msg:
+        print ("Currency selection.")
+        buttons_template = TemplateSendMessage(
+        alt_text='請選擇要查詢的匯率',
+        template=ButtonsTemplate(
+            title='請選擇要查詢的匯率',
+            text='系統將回傳最新匯率資料，此為平均數值，詳細匯率請洽各大銀行官方告示。',
+            thumbnail_image_url='https://www.advisor.ca/wp-content/uploads/sites/5/2018/07/different-world-currencies.jpg',
+            actions=[
+                PostbackTemplateAction(
+                    label='USD',
+                    text='美金',
+                    data='USD'
+                ),
+                PostbackTemplateAction(
+                    label='JPY',
+                    text='日幣',
+                    data='JPY'
+                ),
+                PostbackTemplateAction(
+                    label='RMB',
+                    text='人民幣',
+                    data='RMB'
+                ),
+                PostbackTemplateAction(
+                    label='HKD',
+                    text='港幣',
+                    data='HKD'
+                )
+                PostbackTemplateAction(
+                    label='EUR',
+                    text='歐元',
+                    data='EUR'
+                )
+                PostbackTemplateAction(
+                    label='other',
+                    text='其他',
+                    data='other'
+                )
+                ]
+            )
+        )
+        CurrencyExchange(data)
         return
 
     if 'Hi' in msg or 'hi' in msg or 'hello' in msg or 'Hello' in msg:
