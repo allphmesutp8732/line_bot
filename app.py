@@ -213,7 +213,7 @@ def handle_message(event):
             event.reply_token,
             TemplateSendMessage(
                 alt_text="Template Example",
-                template=button_template_message
+                template=button_template
                 ))
         return
 
