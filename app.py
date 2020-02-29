@@ -190,16 +190,6 @@ def handle_message(event):
                     data='RMB'
                 ),
                 PostbackTemplateAction(
-                    label='HKD',
-                    text='港幣',
-                    data='HKD'
-                ),
-                PostbackTemplateAction(
-                    label='EUR',
-                    text='歐元',
-                    data='EUR'
-                ),
-                PostbackTemplateAction(
                     label='other',
                     text='其他',
                     data='other'
