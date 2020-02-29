@@ -212,7 +212,7 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TemplateSendMessage(
-                alt_text="Template Example",
+                alt_text="請選擇要查詢的匯率",
                 template=buttons_template
                 ))
         return
