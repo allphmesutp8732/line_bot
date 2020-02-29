@@ -105,6 +105,7 @@ def MakeWeather(station):
 
 def CurrencyExchange(currency):
     data = requests.get('https://tw.rter.info/capi.php').json()
+    currency = str(currency)
     currency = "USD" + currency
     Exd = data[currency]
     exrate = Exd["Exrate"]
