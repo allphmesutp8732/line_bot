@@ -119,8 +119,7 @@ def CurrencyExchange(currency_index):
         time = Exd["UTC"]
     msg += str(exrate) + '\n'
     msg = "最後更新時間：UTC" + str(time)
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(text = msg))
-    return
+    return msg
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
@@ -248,7 +247,8 @@ def handle_message(event):
             else:
                 c_index = msg_currency[1]
                 CurrencyExchange(c_index)
-            return
+                line_bot_api.reply_message(event.reply_token, TextSendMessage(text = msg))
+            return 
         return    
 
     if 'Hi' in msg or 'hi' in msg or 'hello' in msg or 'Hello' in msg:
