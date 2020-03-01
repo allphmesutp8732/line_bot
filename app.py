@@ -104,15 +104,21 @@ def MakeWeather(station):
     msg += "最高溫 " + f_maxT[1]["parameter"]["parameterName"] + " 最低溫 " + f_minT[1]["parameter"]["parameterName"]+ " \n"
     return msg
 
-def CurrencyExchange(currency):
+def CurrencyExchange(currency_index):
+    msg = "目前匯率：（台幣：" + currency_index + "） = 1 :"
     data = requests.get('https://tw.rter.info/capi.php').json()
-    currency = str(currency)
-    currency = "USD" + currency
-    Exd = data[currency]
-    exrate = Exd["Exrate"]
-    time = Exd["UTC"]
-    msg = "最後更新時間：UTC" + time + '\n'
-    msg += "目前匯率：" + exrate
+    usdtwd = data["USDTWD"]["Exrate"]
+    time = data["USDTWD"]["Exrate"]
+    currency_dict = {"美金" : "USD", "日幣" : "JPY", "人民幣" : "CNY", "港幣" : "HKD", "歐元" : "EUR", "韓元" : "KRW", "英鎊" : "GBP"}
+    currency_index = "USD" + currency_dict[currency_index]
+    if currency_index == "USDUSD":
+        exrate = 1 / float(usdtwd)
+    else:
+        Exd = data[currency_index]
+        exrate = Exd["Exrate"]
+        time = Exd["UTC"]
+    msg += exrate + '\n'
+    msg = "最後更新時間：UTC" + time
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text = msg))
     return
 
@@ -121,6 +127,8 @@ def handle_message(event):
     print('Handle: reply_token: ' + event.reply_token + ', message: ' + event.message.text)
     msg = event.message.text
     msg_weather = msg.split(' ')
+    msg_currency = msg_weather
+    r = '看不懂，請換句話說。'
 
     if msg_weather[0] == '天氣':
         if len(msg_weather) == 1:
@@ -147,7 +155,7 @@ def handle_message(event):
             TextSendMessage(text=WeatherMsg))
         return
 
-    r = '看不懂，請換句話說。'
+
     if '貼圖' in msg:
         index_id = random.randint(0, len(sticker_ids) - 1)
         sticker_id = str(sticker_ids[index_id])
@@ -167,9 +175,10 @@ def handle_message(event):
             sticker_message)
         return
 
-    if "匯率" in msg or "currency" in msg or "Currency" in msg:
-        print ("Currency selection.")
-        buttons_template = ButtonsTemplate(
+    if msg = "匯率" or "currency" in msg or "Currency" in msg:
+        if msg_currency[1] == "":
+            print ("Currency selection.")
+            buttons_template = ButtonsTemplate(
             title='請選擇要查詢的匯率',
             text='系統將回傳最新匯率資料，此為平均數值，詳細匯率請洽各大銀行官方告示。',
             thumbnail_image_url='https://www.advisor.ca/wp-content/uploads/sites/5/2018/07/different-world-currencies.jpg',
@@ -187,7 +196,7 @@ def handle_message(event):
                 PostbackTemplateAction(
                     label='人民幣',
                     text='匯率 人民幣',
-                    data='RMB'
+                    data='CNY'
                 ),
                 PostbackTemplateAction(
                     label='其他',
@@ -196,14 +205,49 @@ def handle_message(event):
                 )
                 ]
             )
-    #    CurrencyExchange(buttons_template)
-        line_bot_api.reply_message(
-            event.reply_token,
-            TemplateSendMessage(
-                alt_text="請選擇要查詢的匯率",
-                template=buttons_template
+            line_bot_api.reply_message(
+                event.reply_token,
+                TemplateSendMessage(
+                    alt_text="請選擇要查詢的匯率",
+                    template=buttons_template
                 ))
-        return
+            return
+        elif msg_currency[1] == "其他":
+            print("Currency Selection - More.")
+            buttons_template = ButtonsTemplate(
+                title='請選擇要查詢的匯率',
+                text='系統將回傳最新匯率資料，此為平均數值，詳細匯率請洽各大銀行官方告示。',
+                thumbnail_image_url='https://www.advisor.ca/wp-content/uploads/sites/5/2018/07/different-world-currencies.jpg',
+                actions=[
+                PostbackTemplateAction(
+                    label='港幣',
+                    text='匯率 港幣',
+                    data='HKD'
+                ),
+                PostbackTemplateAction(
+                    label='歐元',
+                    text='匯率 歐元',
+                    data='EUR'
+                ),
+                PostbackTemplateAction(
+                    label='韓元',
+                    text='匯率 韓元',
+                    data='KRW'
+                ),
+                PostbackTemplateAction(
+                    label='英鎊',
+                    text='匯率 英鎊',
+                    data='GBP'
+                )
+                ]
+                )
+            line_bot_api.reply_message(
+                event.reply_token,TemplateSendMessage(alt_text="請選擇要查詢的匯率",template=buttons_template))
+            return
+        else:
+            c_index = msg_currency[1]
+            CurrencyExchange(c_index)
+        return    
 
     if 'Hi' in msg or 'hi' in msg or 'hello' in msg or 'Hello' in msg:
         r = 'Hello~'
