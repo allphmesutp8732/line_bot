@@ -108,7 +108,7 @@ def CurrencyExchange(currency_index):
     msg = "目前匯率：（台幣：" + currency_index + "） = 1 :"
     data = requests.get('https://tw.rter.info/capi.php').json()
     usdtwd = data["USDTWD"]["Exrate"]
-    time = data["USDTWD"]["Exrate"]
+    time = data["USDTWD"]["UTC"]
     currency_dict = {"美金" : "USD", "日幣" : "JPY", "人民幣" : "CNY", "港幣" : "HKD", "歐元" : "EUR", "韓元" : "KRW", "英鎊" : "GBP"}
     currency_index = "USD" + currency_dict[currency_index]
     if currency_index == "USDUSD":
