@@ -118,7 +118,8 @@ def CurrencyExchange(currency_index):
         exrate = 1 / float(usdtwd) * float(Exd["Exrate"])
         time = Exd["UTC"]
     msg += str(exrate) + '\n'
-    msg = "最後更新時間：UTC" + str(time)
+    msg += "最後更新時間：UTC" 
+    msg += str(time)
     return msg
 
 @handler.add(MessageEvent, message=TextMessage)
