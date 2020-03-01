@@ -176,7 +176,7 @@ def handle_message(event):
         return
 
     if msg == "匯率" or "currency" in msg or "Currency" in msg:
-        if msg_currency[1] == "":
+        if msg_currency[1] == None:
             print ("Currency selection.")
             buttons_template = ButtonsTemplate(
             title='請選擇要查詢的匯率',
