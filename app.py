@@ -212,41 +212,43 @@ def handle_message(event):
                     template=buttons_template
                 ))
             return
-        elif msg_currency[1] == "其他":
-            print("Currency Selection - More.")
-            buttons_template = ButtonsTemplate(
-                title='請選擇要查詢的匯率',
-                text='系統將回傳最新匯率資料，此為平均數值，詳細匯率請洽各大銀行官方告示。',
-                thumbnail_image_url='https://www.advisor.ca/wp-content/uploads/sites/5/2018/07/different-world-currencies.jpg',
-                actions=[
-                PostbackTemplateAction(
-                    label='港幣',
-                    text='匯率 港幣',
-                    data='HKD'
-                ),
-                PostbackTemplateAction(
-                    label='歐元',
-                    text='匯率 歐元',
-                    data='EUR'
-                ),
-                PostbackTemplateAction(
-                    label='韓元',
-                    text='匯率 韓元',
-                    data='KRW'
-                ),
-                PostbackTemplateAction(
-                    label='英鎊',
-                    text='匯率 英鎊',
-                    data='GBP'
-                )
-                ]
-                )
-            line_bot_api.reply_message(
-                event.reply_token,TemplateSendMessage(alt_text="請選擇要查詢的匯率",template=buttons_template))
-            return
         else:
-            c_index = msg_currency[1]
-            CurrencyExchange(c_index)
+            if msg_currency[1] == "其他":
+                print("Currency Selection - More.")
+                buttons_template = ButtonsTemplate(
+                    title='請選擇要查詢的匯率',
+                    text='系統將回傳最新匯率資料，此為平均數值，詳細匯率請洽各大銀行官方告示。',
+                    thumbnail_image_url='https://www.advisor.ca/wp-content/uploads/sites/5/2018/07/different-world-currencies.jpg',
+                    actions=[
+                    PostbackTemplateAction(
+                        label='港幣',
+                        text='匯率 港幣',
+                      data='HKD'
+                    ),
+                    PostbackTemplateAction(
+                        label='歐元',
+                        text='匯率 歐元',
+                        data='EUR'
+                    ),
+                    PostbackTemplateAction(
+                        label='韓元',
+                        text='匯率 韓元',
+                        data='KRW'
+                    ),
+                    PostbackTemplateAction(
+                        label='英鎊',
+                        text='匯率 英鎊',
+                        data='GBP'
+                    )
+                    ]
+                    )
+                line_bot_api.reply_message(
+                    event.reply_token,TemplateSendMessage(alt_text="請選擇要查詢的匯率",template=buttons_template))
+                return
+            else:
+                c_index = msg_currency[1]
+                CurrencyExchange(c_index)
+            return
         return    
 
     if 'Hi' in msg or 'hi' in msg or 'hello' in msg or 'Hello' in msg:
