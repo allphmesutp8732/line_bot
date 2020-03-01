@@ -118,7 +118,7 @@ def CurrencyExchange(currency_index):
         exrate = 1 / float(usdtwd) * float(Exd["Exrate"])
         time = Exd["UTC"]
     msg += str(exrate) + '\n'
-    msg = "最後更新時間：UTC" + time
+    msg = "最後更新時間：UTC" + str(time)
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text = msg))
     return
 
