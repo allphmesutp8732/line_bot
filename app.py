@@ -175,7 +175,7 @@ def handle_message(event):
             sticker_message)
         return
 
-    if msg = "匯率" or "currency" in msg or "Currency" in msg:
+    if msg == "匯率" or "currency" in msg or "Currency" in msg:
         if msg_currency[1] == "":
             print ("Currency selection.")
             buttons_template = ButtonsTemplate(
