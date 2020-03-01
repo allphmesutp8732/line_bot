@@ -246,8 +246,7 @@ def handle_message(event):
                 return
             else:
                 c_index = msg_currency[1]
-                CurrencyExchange(c_index)
-                line_bot_api.reply_message(event.reply_token, TextSendMessage(text = c_index))
+                line_bot_api.reply_message(event.reply_token, TextSendMessage(text = CurrencyExchange(c_index)))
             return 
         return    
 
