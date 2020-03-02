@@ -125,11 +125,16 @@ def CurrencyExchange(currency_index):
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     print('Handle: reply_token: ' + event.reply_token + ', message: ' + event.message.text)
+    profile = line_bot_api.get_profile(user_id)
+    user_name = profile.display_name
     msg = event.message.text
     msg_weather = msg.split(' ')
     msg_currency = msg_weather
     r = '看不懂，請換句話說。'
-
+    if "自我介紹" in msg or "help" in msg:
+        r = "哈囉～" + user_name + "! 歡迎使用本聊天機器人\n"
+        r += "您可以使用本聊天機器人進行天氣查詢（輸入：天氣 (測站名））、匯率查詢（輸入：匯率）、時間查詢（輸入：現在時間）與基本對話。"
+    #查詢天氣
     if msg_weather[0] == '天氣':
         if len(msg_weather) == 1:
             line_bot_api.reply_message(
@@ -154,8 +159,7 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text=WeatherMsg))
         return
-
-
+    #傳送貼圖
     if '貼圖' in msg:
         index_id = random.randint(0, len(sticker_ids) - 1)
         sticker_id = str(sticker_ids[index_id])
@@ -174,9 +178,9 @@ def handle_message(event):
             event.reply_token,
             sticker_message)
         return
-
+    #查詢匯率
     if "匯率" in msg or "currency" in msg or "Currency" in msg:
-        if len(msg_currency) == 1:
+        if len(msg_currency) == 1: #使用者僅輸入「匯率」
             print ("Currency selection.")
             buttons_template = ButtonsTemplate(
             title='請選擇要查詢的匯率',
@@ -212,7 +216,7 @@ def handle_message(event):
                     template=buttons_template
                 ))
             return
-        else:
+        else: #使用者有輸入貨幣名或點選 Template 上的其他鈕
             if msg_currency[1] == "其他":
                 print("Currency Selection - More.")
                 buttons_template = ButtonsTemplate(
@@ -252,9 +256,9 @@ def handle_message(event):
         return    
 
     if 'Hi' in msg or 'hi' in msg or 'hello' in msg or 'Hello' in msg:
-        r = 'Hello~'
+        r = 'Hello' + user_name + '~!'
     elif "嗨" in msg or '哈囉' in msg or '安安' in msg:
-        r = "嗨嗨～"
+        r = "嗨嗨～" + user_name + "！"
     elif '再見' in msg or '掰掰' in msg:
         r = '掰哺～'
     elif 'bye' in msg or 'Bye' in msg:
