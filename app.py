@@ -127,7 +127,7 @@ def handle_message(event):
     print('Handle: reply_token: ' + event.reply_token + ', message: ' + event.message.text)
     user_id = event.source.user_id
     print("user_id = ",user_id)
-    profile = line_bot_api.get_profile(user_id)
+    profile = line_bot_api.get_profile(user_id, timeout = None)
     user_name = profile.display_name
     msg = event.message.text
     msg_weather = msg.split(' ')
@@ -135,7 +135,7 @@ def handle_message(event):
     r = '看不懂，請換句話說。'
     if "自我介紹" in msg or "help" in msg:
         r = "哈囉～" + user_name + "! 歡迎使用本聊天機器人\n"
-        r += "您可以使用本聊天機器人進行天氣查詢（輸入：天氣 (測站名））、匯率查詢（輸入：匯率）、時間查詢（輸入：現在時間）與基本對話。"
+        r += "您可以使用本聊天機器人進行\n<1> 天氣查詢（輸入：天氣 (測站名））\n<2> 匯率查詢（輸入：匯率）\n<3> 時間查詢（輸入：現在時間）\n<4> 基本對話等"
     #查詢天氣
     if msg_weather[0] == '天氣':
         if len(msg_weather) == 1:
@@ -256,21 +256,20 @@ def handle_message(event):
                 line_bot_api.reply_message(event.reply_token, TextSendMessage(text = CurrencyExchange(c_index)))
             return 
         return    
-
+    #打招呼
     if 'Hi' in msg or 'hi' in msg or 'hello' in msg or 'Hello' in msg:
-        r = 'Hello' + user_name + '~!'
+        r = 'Hello~' + user_name + '!'
     elif "嗨" in msg or '哈囉' in msg or '安安' in msg:
         r = "嗨嗨～" + user_name + "！"
     elif '再見' in msg or '掰掰' in msg:
         r = '掰哺～'
     elif 'bye' in msg or 'Bye' in msg:
         r = "See Ya~"
+    #查詢時間
     elif '現在時間' in msg or '現在幾點' in msg or '現在時刻' in msg:
         now = datetime.utcnow().replace(tzinfo = timezone.utc).astimezone(timezone(timedelta(hours = 8)))
         r = now.strftime('%H:%M:%S')
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=r))
+    line_bot_api.reply_message(event.reply_token,TextSendMessage(text=r))
 
 @handler.add(MessageEvent)
 def handle_sticker_message(event, destination):
