@@ -125,6 +125,8 @@ def CurrencyExchange(currency_index):
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     print('Handle: reply_token: ' + event.reply_token + ', message: ' + event.message.text)
+    user_id = event.source.user_id
+    print("user_id = ",user_id)
     profile = line_bot_api.get_profile(user_id)
     user_name = profile.display_name
     msg = event.message.text
