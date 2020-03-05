@@ -260,7 +260,7 @@ def handle_message(event):
                 line_bot_api.reply_message(event.reply_token, TextSendMessage(text = CurrencyExchange(c_index)))
             return 
         return    
-    if msg_weather[0] == "barcode":
+    if msg_weather[0] == "barcode" or msg_weather[0] == "Barcode" or msg_weather[0] == "BARCODE":
         from selenium import webdriver
         from selenium.webdriver.chrome.options import Options
         barcode_data = msg_weather[1]
@@ -282,8 +282,9 @@ def handle_message(event):
         press = driver.find_element_by_xpath('/html/body/div[2]/div[3]/form/div[5]/div[1]/div/div[3]/a').click()
         time.sleep(2)
         img = driver.find_element_by_xpath('//*[@id="infoTarget"]/div[1]/img').get_attribute('src')
-        driver.quit()
+        print(str(img))
         image_message = ImageSendMessage(original_content_url = img, preview_image_url = img)
+        driver.quit()
         return
 
     #打招呼
