@@ -271,6 +271,8 @@ def handle_message(event):
         options.add_argument("--ignore-certificate-errors")
         options.add_argument("--headless")
         options.add_argument("--incognito")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
         driver = webdriver.Chrome(options = options)
         driver.get("https://barcode.tec-it.com/zh")
         ssl._create_default_https_context = ssl._create_unverified_context
@@ -296,8 +298,8 @@ def handle_message(event):
     #查詢時間
     elif '現在時間' in msg or '現在幾點' in msg or '現在時刻' in msg:
         now = datetime.utcnow().replace(tzinfo = timezone.utc).astimezone(timezone(timedelta(hours = 8)))
-        r = now.strftime('%H:%M:%S')
-    line_bot_api.reply_message(event.reply_token,TextSendMessage(text= "現在時間：" + r))
+        r = "現在時間：" + now.strftime('%H:%M:%S')
+    line_bot_api.reply_message(event.reply_token,TextSendMessage(text=r))
 
 @handler.add(MessageEvent)
 def handle_sticker_message(event, destination):
