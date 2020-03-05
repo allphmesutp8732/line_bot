@@ -270,7 +270,7 @@ def handle_message(event):
         options.add_argument("--ignore-certificate-errors")
         options.add_argument("--headless")
         options.add_argument("--incognito")
-        driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=options)
+        driver = webdriver.PhantomJS()
         driver.get("https://barcode.tec-it.com/zh")
         ssl._create_default_https_context = ssl._create_unverified_context
         data = driver.find_element_by_xpath('/html/body/div[2]/div[3]/form/div[5]/div[1]/div/div[1]/div[3]/textarea')
