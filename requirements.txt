@@ -1,3 +1,4 @@
 line-bot-sdk
 gunicorn
 flask
+selenium==3.8.0
