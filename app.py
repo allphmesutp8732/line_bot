@@ -8,8 +8,7 @@ from linebot import (
 from linebot.exceptions import (
     InvalidSignatureError
 )
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+
 import ssl
 import time
 from linebot.models import *
@@ -262,6 +261,8 @@ def handle_message(event):
             return 
         return    
     if msg_weather[0] == "barcode":
+        from selenium import webdriver
+        from selenium.webdriver.chrome.options import Options
         barcode_data = msg_weather[1]
         options = Options()
         options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
@@ -270,7 +271,7 @@ def handle_message(event):
         options.add_argument("--ignore-certificate-errors")
         options.add_argument("--headless")
         options.add_argument("--incognito")
-        driver = webdriver.PhantomJS()
+        driver = webdriver.Chrome(options = options)
         driver.get("https://barcode.tec-it.com/zh")
         ssl._create_default_https_context = ssl._create_unverified_context
         data = driver.find_element_by_xpath('/html/body/div[2]/div[3]/form/div[5]/div[1]/div/div[1]/div[3]/textarea')
