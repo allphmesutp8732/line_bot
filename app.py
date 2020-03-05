@@ -19,6 +19,7 @@ import re
 import random
 import json
 import requests
+import os
 
 app = Flask(__name__)
 
@@ -263,13 +264,13 @@ def handle_message(event):
     if msg_weather[0] == "barcode":
         barcode_data = msg_weather[1]
         options = Options()
+        options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
         prefs = {'profile.default_content_setting_values':{'notification' : 2}}
         options.add_experimental_option('prefs',prefs)
         options.add_argument("--ignore-certificate-errors")
         options.add_argument("--headless")
         options.add_argument("--incognito")
-
-        driver = webdriver.Chrome(options=options)
+        driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=options)
         driver.get("https://barcode.tec-it.com/zh")
         ssl._create_default_https_context = ssl._create_unverified_context
         data = driver.find_element_by_xpath('/html/body/div[2]/div[3]/form/div[5]/div[1]/div/div[1]/div[3]/textarea')
