@@ -261,31 +261,32 @@ def handle_message(event):
             return 
         return    
     if msg_weather[0] == "barcode" or msg_weather[0] == "Barcode" or msg_weather[0] == "BARCODE":
-        from selenium import webdriver
-        from selenium.webdriver.chrome.options import Options
-        import base64
         barcode_data = msg_weather[1]
-        options = Options()
-        options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-        prefs = {'profile.default_content_setting_values':{'notification' : 2}}
-        options.add_experimental_option('prefs',prefs)
-        options.add_argument("--ignore-certificate-errors")
-        options.add_argument("--headless")
-        options.add_argument("--incognito")
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
-        driver = webdriver.Chrome(options = options)
-        driver.get("https://barcode.tec-it.com/zh")
-        ssl._create_default_https_context = ssl._create_unverified_context
-        data = driver.find_element_by_xpath('/html/body/div[2]/div[3]/form/div[5]/div[1]/div/div[1]/div[3]/textarea')
-        data.clear()
-        data.send_keys(barcode_data)
-        press = driver.find_element_by_xpath('/html/body/div[2]/div[3]/form/div[5]/div[1]/div/div[3]/a').click()
-        time.sleep(2)
-        img = driver.find_element_by_xpath('//*[@id="infoTarget"]/div[1]/img').get_attribute('src')
-        #image_message = ImageSendMessage(original_content_url = img, preview_image_url = img)
-        r = driver.find_element_by_xpath('/html/body/div[2]/div[3]/form/div[7]/div[1]/a[3]')
-        driver.quit()
+        r = "https://barcode.tec-it.com/barcode.ashx?data=" + barcode_data + "&code=Code128&dpi=96&dataseparator=&download=true"       
+        # from selenium import webdriver
+        # from selenium.webdriver.chrome.options import Options
+        # import base64
+        # options = Options()
+        # options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+        # prefs = {'profile.default_content_setting_values':{'notification' : 2}}
+        # options.add_experimental_option('prefs',prefs)
+        # options.add_argument("--ignore-certificate-errors")
+        # options.add_argument("--headless")
+        # options.add_argument("--incognito")
+        # options.add_argument("--no-sandbox")
+        # options.add_argument("--disable-dev-shm-usage")
+        # driver = webdriver.Chrome(options = options)
+        # driver.get("https://barcode.tec-it.com/zh")
+        # ssl._create_default_https_context = ssl._create_unverified_context
+        # data = driver.find_element_by_xpath('/html/body/div[2]/div[3]/form/div[5]/div[1]/div/div[1]/div[3]/textarea')
+        # data.clear()
+        # data.send_keys(barcode_data)
+        # press = driver.find_element_by_xpath('/html/body/div[2]/div[3]/form/div[5]/div[1]/div/div[3]/a').click()
+        # time.sleep(2)
+        # img = driver.find_element_by_xpath('//*[@id="infoTarget"]/div[1]/img').get_attribute('src')
+        # #image_message = ImageSendMessage(original_content_url = img, preview_image_url = img)
+        # r = driver.find_element_by_xpath('/html/body/div[2]/div[3]/form/div[7]/div[1]/a[3]')
+        # driver.quit()
         line_bot_api.reply_message(event.reply_token,TextSendMessage(text=r))
         return
 
