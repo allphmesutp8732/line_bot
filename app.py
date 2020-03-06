@@ -262,7 +262,7 @@ def handle_message(event):
         return    
     if msg_weather[0] == "barcode" or msg_weather[0] == "Barcode" or msg_weather[0] == "BARCODE":
         barcode_data = msg_weather[1]
-        r = "https://barcode.tec-it.com/barcode.ashx?data=" + barcode_data + "&code=Code128&dpi=96&dataseparator=&download=true"       
+        r = "https://barcode.tec-it.com/barcode.ashx?data=" + barcode_data + "&code=Code128&dpi=96&dataseparator="       
         # from selenium import webdriver
         # from selenium.webdriver.chrome.options import Options
         # import base64
@@ -284,10 +284,10 @@ def handle_message(event):
         # press = driver.find_element_by_xpath('/html/body/div[2]/div[3]/form/div[5]/div[1]/div/div[3]/a').click()
         # time.sleep(2)
         # img = driver.find_element_by_xpath('//*[@id="infoTarget"]/div[1]/img').get_attribute('src')
-        # #image_message = ImageSendMessage(original_content_url = img, preview_image_url = img)
+        image_message = ImageSendMessage(original_content_url = r, preview_image_url = r)
         # r = driver.find_element_by_xpath('/html/body/div[2]/div[3]/form/div[7]/div[1]/a[3]')
         # driver.quit()
-        line_bot_api.reply_message(event.reply_token,TextSendMessage(text=r))
+        line_bot_api.reply_message(event.reply_token,image_message)
         return
 
     #打招呼
